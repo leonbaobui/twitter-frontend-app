@@ -85,6 +85,7 @@ import FullTweet from "./pages/FullTweet/FullTweet";
 import Connect from "./pages/Connect/Connect";
 import Trends from "./pages/Trends/Trends";
 import Topics from "./pages/Topics/Topics";
+import OAuth2RedirectHandler from "./pages/OAuth2/OAuth2RedirectHandler";
 import UserTopics from "./pages/UserTopics/UserTopics";
 import {
     TOPIC_CHAT,
@@ -232,6 +233,7 @@ const App: FC = (): ReactElement => {
                         <Route path={ACCOUNT_SIGNIN} component={Authentication} exact />
                         <Route path={ACCOUNT_LOGIN} component={Login} exact />
                         <Route path={ACCOUNT_FORGOT} component={ForgotPassword} />
+                        <Route path={"/oauth2/redirect"} component={OAuth2RedirectHandler} />
                         <Route path={HOME} component={Home} exact />
                         <Route path={HOME_CONNECT} component={Connect} exact />
                         <Route path={HOME_TRENDS} component={Trends} exact />

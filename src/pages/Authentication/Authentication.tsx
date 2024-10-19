@@ -31,56 +31,11 @@ const Authentication: FC = (): ReactElement => {
         dispatch(setOpenModal());
     };
 
-//     const login = useGoogleLogin({
-// //         onSuccess: codeResponse => handleGoogleSuccess(codeResponse),
-// //         onError: (res) => handleGoogleFailure(res),
-// //         ux_mode: 'redirect',
-//         // redirect_uri: "http://localhost:3000",
-//         // redirect_uri: "https://ms-api-gateway-inku.onrender.com/ui/v1/auth/login/oauth2/code/google",
-//         // redirect_uri: "http://localhost:8443/ms-user-service/ui/v1/auth/login/oauth2/code/google",
-// //         flow: 'auth-code',
-//       });
-//
-      const login = useGoogleLogin({
-        ux_mode: "redirect",
-        state: '<state>',
-        redirect_uri: "http://localhost:8443/ms-user-service/login/oauth2/code/google",
-        flow: "auth-code",
-        scope: "https://www.googleapis.com/auth/drive.readonly",
-        onSuccess: (codeResponse) => console.log('Login OK so far'),
-        onError: (error) => console.log('Login Failed:', error)
-      });
+    const loginWithGoogle = (): void => {
+        window.location.href = 'http://localhost:8443/ms-user-service/oauth2/authorize/google?redirect_uri=http://localhost:3000/oauth2/redirect';
+    }
 
-    const handleGoogleSuccess = (response: any) => {
-        console.log('Login Success:', response);
-        const idToken = response.credential; // Note: Change from tokenId to credential
-      
-        // Pass the ID token to your backend service
-        fetch('https://ms-api-gateway-inku.onrender.com/ui/v1/auth/login/oauth2/code/google', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ idToken }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('User logged in or registered:', data);
-        })
-        .catch(error => {
-          console.error('Error logging in or registering user:', error);
-        });
-    };
-
-    const handleGoogleFailure = (response: any) => {
-        console.log('Google Login Failure:', response);
-        // Handle Google login failure
-    };
-
-    const handleFacebookResponse = (response: any) => {
-        console.log('Facebook Login Response:', response);
-        // Handle Facebook login response
-    };
+    const handleFacebookResponse = (): void => {}
 
     return (
         <div className={classes.wrapper}>
@@ -145,7 +100,7 @@ const Authentication: FC = (): ReactElement => {
                     <div>
                     <Button
                         onClick={() => {
-                            login()
+                            loginWithGoogle()
                         }}
                         className={classes.btnGoogle}
                         variant="outlined"
