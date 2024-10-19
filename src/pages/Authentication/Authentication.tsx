@@ -1,8 +1,11 @@
 import React, { FC, ReactElement } from "react";
 import { useHistory } from "react-router-dom";
 import TwitterIcon from "@material-ui/icons/Twitter";
-import { Button, List, ListItem, Typography } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { Button, List, ListItem, Typography, Divider, Box } from "@material-ui/core";
+import { useDispatch } from "react-redux" ;
+import { useState } from 'react';
+import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 import { useAuthenticationStyles } from "./AuthenticationStyles";
 import { CommunityIcon, ReplyIcon, SearchIcon } from "../../icons";
@@ -18,6 +21,7 @@ const Authentication: FC = (): ReactElement => {
     const classes = useAuthenticationStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const [state, setState] = useState();
 
     const handleClickOpenSignIn = (): void => {
         history.push(ACCOUNT_LOGIN);
@@ -25,6 +29,57 @@ const Authentication: FC = (): ReactElement => {
 
     const handleClickOpenSignUp = (): void => {
         dispatch(setOpenModal());
+    };
+
+//     const login = useGoogleLogin({
+// //         onSuccess: codeResponse => handleGoogleSuccess(codeResponse),
+// //         onError: (res) => handleGoogleFailure(res),
+// //         ux_mode: 'redirect',
+//         // redirect_uri: "http://localhost:3000",
+//         // redirect_uri: "https://ms-api-gateway-inku.onrender.com/ui/v1/auth/login/oauth2/code/google",
+//         // redirect_uri: "http://localhost:8443/ms-user-service/ui/v1/auth/login/oauth2/code/google",
+// //         flow: 'auth-code',
+//       });
+//
+      const login = useGoogleLogin({
+        ux_mode: "redirect",
+        state: '<state>',
+        redirect_uri: "http://localhost:8443/ms-user-service/login/oauth2/code/google",
+        flow: "auth-code",
+        scope: "https://www.googleapis.com/auth/drive.readonly",
+        onSuccess: (codeResponse) => console.log('Login OK so far'),
+        onError: (error) => console.log('Login Failed:', error)
+      });
+
+    const handleGoogleSuccess = (response: any) => {
+        console.log('Login Success:', response);
+        const idToken = response.credential; // Note: Change from tokenId to credential
+      
+        // Pass the ID token to your backend service
+        fetch('https://ms-api-gateway-inku.onrender.com/ui/v1/auth/login/oauth2/code/google', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ idToken }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('User logged in or registered:', data);
+        })
+        .catch(error => {
+          console.error('Error logging in or registering user:', error);
+        });
+    };
+
+    const handleGoogleFailure = (response: any) => {
+        console.log('Google Login Failure:', response);
+        // Handle Google login failure
+    };
+
+    const handleFacebookResponse = (response: any) => {
+        console.log('Facebook Login Response:', response);
+        // Handle Facebook login response
     };
 
     return (
@@ -82,6 +137,44 @@ const Authentication: FC = (): ReactElement => {
                     >
                         Log in
                     </Button>
+                    <div className={classes.dividerContainer}>
+                        <Divider className={classes.divider} />
+                        <Typography variant="caption" className={classes.dividerText}> or </Typography>
+                        <Divider className={classes.divider} />
+                    </div>
+                    <div>
+                    <Button
+                        onClick={() => {
+                            login()
+                        }}
+                        className={classes.btnGoogle}
+                        variant="outlined"
+                        color="primary"
+                        size="medium"
+                        fullWidth
+                    >
+                        <img src={`${process.env.PUBLIC_URL}/google-icon.png`} alt="Google logo" />
+                        Sign in with Google
+                    </Button>    
+                    </div>
+                    <FacebookLogin
+                        appId="your-facebook-app-id"
+                        fields="name,email,picture"
+                        callback={handleFacebookResponse}
+                        render={renderProps => (
+                            <Button
+                            onClick={renderProps.onClick}
+                            className={classes.btnFacebook}
+                            variant="outlined"
+                            color="primary"
+                            size="large"
+                            fullWidth
+                        >
+                            <img src={`${process.env.PUBLIC_URL}/facebook-icon.png`} alt="Facebook logo" />
+                            Sign in with Facebook
+                        </Button>    
+                        )}
+                    />
                     <RegistrationModal />
                     <CustomizeModal />
                     <CreateAccountModal />

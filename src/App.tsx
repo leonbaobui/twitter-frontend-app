@@ -19,6 +19,7 @@ import Explore from "./pages/Explore/Explore";
 import FollowingFollowers from "./pages/FollowingFollowers/FollowingFollowers";
 import TweetImageModal from "./components/TweetImageModal/TweetImageModal";
 import Login from "./pages/Login/Login";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Bookmarks from "./pages/Bookmarks/Bookmarks";
 import Notifications from "./pages/Notifications/Notifications";
@@ -222,6 +223,7 @@ const App: FC = (): ReactElement => {
     };
 
     return (
+    <GoogleOAuthProvider clientId="93602122040-9lulf253l0k5eqhd72uobpik7ou4vrod.apps.googleusercontent.com">
         <MuiThemeProvider theme={createTheme(deepmerge(theme, colorScheme))}>
             <CssBaseline />
             <div className="App">
@@ -263,6 +265,7 @@ const App: FC = (): ReactElement => {
                 <ActionSnackbar />
             </div>
         </MuiThemeProvider>
+    </GoogleOAuthProvider>
     );
 };
 

@@ -71,6 +71,50 @@ export const useAuthenticationStyles = makeStyles((theme) => ({
     rightSideTwitterIcon: {
         fontSize: 45
     },
+    dividerContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '20px 0',
+    },
+    divider: {
+        flex: 1,
+        height: 1,
+        backgroundColor: 'black',
+    },
+    dividerText: {
+        padding: '0 10px',
+        fontSize: '15px'
+    },
+    btnGoogle: {
+        margin: '0px 0px 20px',
+        padding: '7px 21px',
+        // '&:hover': {
+        //     color: 'white',
+        //     backgroundColor: '#db3236'
+        // },
+        '& img': {
+            width: "18px",
+            height: "18px",
+            marginRight: "8px",
+            backgroundColor: "transparent" 
+        },
+        
+    },
+    btnFacebook: {
+        margin: '0px 0px 20px',
+        padding: '7px 21px',
+        // '&:hover': {
+        //     color: 'white',
+        //     backgroundColor: '#db3236'
+        // },
+        '& img': {
+            width: "18px",
+            height: "18px",
+            marginRight: "8px",
+            backgroundColor: "transparent" 
+        },
+        
+    },
     rightSideTittle: {
         fontWeight: 700,
         fontSize: 32,
